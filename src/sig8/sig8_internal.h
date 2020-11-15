@@ -44,10 +44,28 @@ typedef struct {
     Color *pixels;
 } Display;
 
+typedef struct {
+    void *window;             //!< SDL Window object
+    void *context;            //!< GL context
+
+    unsigned screenVBO;       //!< Vertex buffer object for the screen rect
+    unsigned screenPBO;       //!< Pixel buffer object for the screen texture
+    unsigned screenTexture;   //!< Screen texture
+    unsigned screenVAO;       //!< Vertex array object for the screen
+    unsigned shader;          //!< Shader program for the screen
+    int offLoc;               //!< Location of the "offset" uniform in the shader
+
+    int width;                //!< Width of the window in pixels
+    int height;               //!< Height of the window in pixels
+    float offsetX, offsetY;
+} Window;
+
 //! Struct containing all the information about current application state.
 typedef struct {
     void (*update)(void); //!< Update function, called on every frame
     Display display;      //!< Current display state
+    Window window;        //!< Current window state
+    bool shouldQuit;
 } State;
 
 static State *state;
@@ -65,5 +83,14 @@ static void DisplayDeinit(void);
 
 //! Set display pixel color, fails if the coordinates are out of bounds.
 static inline void SetPixelColor(int x, int y, Color color);
+
+//! Create and initialize SDL window.
+static void WindowInit(void);
+
+//! Draw a frame.
+static void WindowDraw(void);
+
+//! Handle window events.
+static void WindowHandleEvents(void);
 
 #endif

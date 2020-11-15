@@ -36,13 +36,14 @@ void sig8_Initialize(unsigned flags)
         return;
     }
 
-    state = malloc(sizeof(State));
+    state = calloc(1, sizeof(State));
 
     if (flags & FLAG_ATEXIT) {
         atexit(Deinitialize);
     }
 
     DisplayInit();
+    if (flags & FLAG_INIT_WINDOW) WindowInit();
 }
 
 int sig8_DefaultMain(void (*setup)(void), void (*loop)(void), int argc, char **argv)
@@ -68,4 +69,9 @@ void Deinitialize(void)
 void Run(void (*update)(void))
 {
     state->update = update;
+    while (!state->shouldQuit) {
+        update();
+        WindowDraw();
+        WindowHandleEvents();
+    }
 }

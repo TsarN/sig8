@@ -9,6 +9,20 @@ else()
     target_compile_options(sig8 PRIVATE -Wall -Wextra)
 endif()
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+    target_compile_options(sig8 PUBLIC -sUSE_SDL=2)
+    target_link_options(sig8 PUBLIC -sUSE_SDL=2 -sFULL_ES3=1)
+    target_compile_definitions(sig8 PRIVATE SIG8_USE_BUILTIN_ES3)
+else()
+    find_package(SDL2 REQUIRED)
+    find_package(OpenGL REQUIRED)
+
+    target_include_directories(sig8 PRIVATE SDL2 OpenGL::GL)
+    target_link_libraries(sig8 PRIVATE SDL2 OpenGL::GL glad::glad_gles3)
+    target_compile_definitions(sig8 PRIVATE SIG8_USE_GLAD_ES3)
+endif()
+
+
 set_target_properties(sig8 PROPERTIES
     VERSION ${SIG8_VERSION}
     C_STANDARD 99
@@ -18,3 +32,5 @@ target_include_directories(sig8
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}"
 )
+
+target_link_libraries(sig8 PRIVATE m ${CMAKE_DL_LIBS})

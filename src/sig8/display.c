@@ -32,6 +32,17 @@ void DisplayInit(void)
     state->display.width = 128;
     state->display.height = 128;
     state->display.pixels = malloc(sizeof(Color) * state->display.width * state->display.height);
+
+    for (int i = 0; i < 128; ++i) {
+        for (int j = 0; j < 128; ++j) {
+            SetPixelColor(i, j, (Color) {
+                .r = rand() & 0xff,
+                .g = rand() & 0xff,
+                .b = rand() & 0xff,
+                .a = rand() & 0xff,
+            });
+        }
+    }
 }
 
 void DisplayDeinit(void)
