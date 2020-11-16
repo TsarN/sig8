@@ -22,6 +22,9 @@ else()
     target_compile_definitions(sig8 PRIVATE SIG8_USE_GLAD_ES3)
 endif()
 
+if (${CMAKE_C_COMPILER_ID} MATCHES "TinyCC")
+    target_compile_definitions(sig8 PRIVATE SDL_DISABLE_IMMINTRIN_H)
+endif()
 
 set_target_properties(sig8 PROPERTIES
     VERSION ${SIG8_VERSION}
