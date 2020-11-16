@@ -24,7 +24,8 @@
  */
 
 #include "sig8_internal.h"
-#include <SDL2/SDL.h>
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
 
 #ifdef SIG8_USE_GLAD_ES3
 #include <glad.h>
@@ -64,10 +65,13 @@ static const float screenRect[] = {
 
 static void OnResize(void)
 {
-    SDL_GetWindowSize(state->window.window, &state->window.width, &state->window.height);
+    glfwGetWindowSize(state->window.window, &state->window.width,
+                      &state->window.height);
 
-    float pixelScaleX = (float)state->window.width / (float)state->display.width;
-    float pixelScaleY = (float)state->window.height / (float)state->display.height;
+    float pixelScaleX =
+            (float) state->window.width / (float) state->display.width;
+    float pixelScaleY =
+            (float) state->window.height / (float) state->display.height;
     float pixelScale;
 
     if (pixelScaleX < pixelScaleY) {
@@ -76,26 +80,18 @@ static void OnResize(void)
         pixelScale = floorf(pixelScaleY);
     }
 
-    state->window.offsetX = (1.0f - (float)state->display.width * pixelScale /
-                            (float)state->window.width) / 2.0f;
-    state->window.offsetY = (1.0f - (float)state->display.height * pixelScale /
-                            (float)state->window.height) / 2.0f;
+    state->window.offsetX = (1.0f - (float) state->display.width * pixelScale /
+                                    (float) state->window.width) / 2.0f;
+    state->window.offsetY = (1.0f - (float) state->display.height * pixelScale /
+                                    (float) state->window.height) / 2.0f;
 }
-static void WindowHandleEvents(void)
+
+static void SetFramebufferSizeCallback(GLFWwindow *window, int w, int h)
 {
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_WINDOWEVENT) {
-            if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                OnResize();
-            }
-        }
-
-        if (event.type == SDL_QUIT) {
-            state->shouldQuit = true;
-        }
-    }
+    (void)window;
+    (void)w;
+    (void)h;
+    OnResize();
 }
 
 static void UpdateBufferData(void)
@@ -152,9 +148,11 @@ static void GLESInit(void)
     glBindVertexArray(state->window.screenVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, state->window.screenVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof screenRect, screenRect, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof screenRect, screenRect,
+                 GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float),
+                          (void *) 0);
     glEnableVertexAttribArray(0);
 
     // Configure texture
@@ -210,7 +208,8 @@ static void GLESInit(void)
     glGetProgramiv(state->window.shader, GL_LINK_STATUS, &success);
     if (!success) {
         fputs("Shader linkage failed.", stderr);
-        glGetProgramInfoLog(state->window.shader, sizeof infoLog, NULL, infoLog);
+        glGetProgramInfoLog(state->window.shader, sizeof infoLog, NULL,
+                            infoLog);
         fputs(infoLog, stderr);
         exit(EXIT_FAILURE);
     }
@@ -222,6 +221,17 @@ static void GLESInit(void)
 
     OnResize();
     UpdateBufferData();
+
+    glfwSetFramebufferSizeCallback(state->window.window,
+                                   SetFramebufferSizeCallback);
+}
+
+static void WindowHandleEvents(void)
+{
+    glfwPollEvents();
+    if (glfwWindowShouldClose(state->window.window)) {
+        state->shouldQuit = true;
+    }
 }
 
 static void WindowDraw(void)
@@ -241,46 +251,40 @@ static void WindowDraw(void)
     glUniform2f(state->window.offLoc, state->window.offsetX, state->window.offsetY);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    SDL_GL_SwapWindow(state->window.window);
+    glfwSwapBuffers(state->window.window);
+}
+
+static void WindowFail(void)
+{
+    fputs("Internal error", stderr);
+    Deinitialize();
+    glfwTerminate();
+    exit(EXIT_FAILURE);
 }
 
 static void WindowInit(void)
 {
-    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) != 0) {
-        fprintf(stderr, "SDL_Init(): %s\n", SDL_GetError());
-        Deinitialize();
-        exit(EXIT_FAILURE);
+    if (!glfwInit()) {
+        WindowFail();
     }
 
-    SDL_Window *window = state->window.window = SDL_CreateWindow(
-            "sig8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 512, 512,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+
+    GLFWwindow *window = state->window.window =
+            glfwCreateWindow(512, 512, "sig8", NULL, NULL);
 
     if (!window) {
-        fprintf(stderr, "SDL_CreateWindow(): %s\n", SDL_GetError());
-        Deinitialize();
-        exit(EXIT_FAILURE);
+        WindowFail();
     }
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-
-    SDL_GLContext context = state->window.context = SDL_GL_CreateContext(window);
-
-    if (!context) {
-        fprintf(stderr, "SDL_GL_CreateContext(): %s\n", SDL_GetError());
-        Deinitialize();
-        exit(EXIT_FAILURE);
-    }
-
-    SDL_GL_SetSwapInterval(1);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
 
 #ifdef SIG8_USE_GLAD_ES3
-    if (!gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress)) {
-        fprintf(stderr, "gladLoadGLES2Loader(): failure\n");
-        Deinitialize();
-        exit(EXIT_FAILURE);
+    if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
+        WindowFail();
     }
 #endif
 

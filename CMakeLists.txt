@@ -4,8 +4,8 @@ project(sig8 VERSION ${SIG8_VERSION} DESCRIPTION "Retro game library" LANGUAGES 
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
-add_subdirectory(src)
 add_subdirectory(thirdparty)
+add_subdirectory(src)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Only compile examples if building the library itself

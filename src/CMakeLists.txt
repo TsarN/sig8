@@ -10,17 +10,17 @@ else()
 endif()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
-    target_compile_options(sig8 PUBLIC -sUSE_SDL=2)
-    target_link_options(sig8 PUBLIC -sUSE_SDL=2 -sFULL_ES3=1)
+    target_link_options(sig8 PUBLIC -sFULL_ES3=1)
     target_compile_definitions(sig8 PRIVATE SIG8_USE_BUILTIN_ES3)
 else()
-    find_package(SDL2 REQUIRED)
     find_package(OpenGL REQUIRED)
 
-    target_include_directories(sig8 PRIVATE SDL2 OpenGL::GL)
-    target_link_libraries(sig8 PRIVATE SDL2 OpenGL::GL glad::glad_gles3)
+    target_include_directories(sig8 PRIVATE OpenGL::GL)
+    target_link_libraries(sig8 PRIVATE OpenGL::GL glad::glad_gles3)
     target_compile_definitions(sig8 PRIVATE SIG8_USE_GLAD_ES3)
 endif()
+
+target_link_libraries(sig8 PRIVATE glfw::glfw)
 
 if (${CMAKE_C_COMPILER_ID} MATCHES "TinyCC")
     target_compile_definitions(sig8 PRIVATE SDL_DISABLE_IMMINTRIN_H)

@@ -31,6 +31,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 typedef unsigned char u8;
 
@@ -45,7 +47,7 @@ typedef struct {
 } Display;
 
 typedef struct {
-    void *window;             //!< SDL Window object
+    void *window;             //!< Window object
     void *context;            //!< GL context
 
     unsigned screenVBO;       //!< Vertex buffer object for the screen rect
