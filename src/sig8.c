@@ -26,3 +26,4 @@
 #include "sig8/system.c"
 #include "sig8/display.c"
 #include "sig8/window.c"
+#include "sig8/graphics.c"

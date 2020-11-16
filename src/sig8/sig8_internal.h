@@ -37,7 +37,7 @@
 typedef unsigned char u8;
 
 typedef struct {
-    u8 r, g, b, a;
+    u8 r, g, b;
 } Color;
 
 //! Display state.
@@ -67,15 +67,43 @@ typedef struct {
     void (*update)(void); //!< Update function, called on every frame
     Display display;      //!< Current display state
     Window window;        //!< Current window state
+    Palette palette;      //!< Current palette
     bool shouldQuit;
 } State;
 
+typedef struct {
+    char *path;  //!< Owned string, path to the resource
+    bool system; //!< True for builtin resources (like editor sprites)
+} ResourceInfo;
+
+
+#define SPRITE_SHEET_WIDTH 16
+#define SPRITE_SHEET_HEIGHT 16
+#define SPRITE_SHEET_SIZE 256
+#define SPRITE_WIDTH 8
+#define SPRITE_HEIGHT 8
+#define SPRITE_SHEET_WIDTH_PX (SPRITE_SHEET_WIDTH * SPRITE_WIDTH)
+#define SPRITE_SHEET_HEIGHT_PX (SPRITE_SHEET_HEIGHT * SPRITE_HEIGHT)
+
+struct SpriteSheet_s {
+    ResourceInfo info;
+    u8 *pixels;
+};
+
+struct Palette_s {
+    ResourceInfo info;
+    int size;
+    Color *colors;
+};
+
 static State *state;
 
-// Flags for sig8_Initialize
-static const unsigned FLAG_INIT = 0x01;        //!< perform initialization
-static const unsigned FLAG_ATEXIT = 0x02;      //!< install atexit handlers
-static const unsigned FLAG_INIT_WINDOW = 0x04; //!< initialize [window]
+//! Flags for sig8_Initialize
+enum {
+    FLAG_INIT = 0x01,        //!< perform initialization
+    FLAG_ATEXIT = 0x02,      //!< install atexit handlers
+    FLAG_INIT_WINDOW = 0x04  //!< initialize [window]
+};
 
 //! Initialize display with default settings.
 static void DisplayInit(void);
@@ -83,8 +111,11 @@ static void DisplayInit(void);
 //! Deinitialize display.
 static void DisplayDeinit(void);
 
-//! Set display pixel color, fails if the coordinates are out of bounds.
+//! Set display pixel color, assuming the coordinates are inside screen bounds.
 static inline void SetPixelColor(int x, int y, Color color);
+
+//! Get display pixel color, assuming the coordinates are inside screen bounds.
+static inline Color GetPixelColor(int x, int y);
 
 //! Create and initialize SDL window.
 static void WindowInit(void);

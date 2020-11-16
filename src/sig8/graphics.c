@@ -23,40 +23,40 @@
  *  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-#include <assert.h>
 #include "sig8_internal.h"
 
-void DisplayInit(void)
+void UsePalette(Palette palette)
 {
-    state->display.width = 128;
-    state->display.height = 128;
-    state->display.pixels = malloc(sizeof(Color) * state->display.width * state->display.height);
+    state->palette = palette;
+}
 
-    for (int i = 0; i < 128; ++i) {
-        for (int j = 0; j < 128; ++j) {
-            SetPixelColor(i, j, (Color) {
-                .r = 0,
-                .g = 0,
-                .b = 0,
-            });
-        }
+void PutPixel(int x, int y, int color)
+{
+    if (color < 0 || color >= state->palette->size) {
+        return;
     }
+
+    Color c = state->palette->colors[color];
+    PutPixelRGB(x, y, c.r, c.g, c.b);
 }
 
-void DisplayDeinit(void)
+void PutPixelRGB(int x, int y, int r, int g, int b)
 {
-    free(state->display.pixels);
+    if (x < 0 || y < 0 || x >= state->display.width || y >= state->display.height) {
+        return;
+    }
+
+    SetPixelColor(x, y, (Color) { .r = r, .g = g, .b = b });
 }
 
-static inline void SetPixelColor(int x, int y, Color color)
+void GetPixelRGB(int x, int y, int *r, int *g, int *b)
 {
-    assert(x >= 0 && y >= 0 && x < state->display.width && y < state->display.height && state->display.pixels);
-    state->display.pixels[x + y * state->display.width] = color;
-}
+    if (x < 0 || y < 0 || x >= state->display.width || y >= state->display.height) {
+        return;
+    }
 
-static inline Color GetPixelColor(int x, int y)
-{
-    assert(x >= 0 && y >= 0 && x < state->display.width && y < state->display.height && state->display.pixels);
-    return state->display.pixels[x + y * state->display.width];
+    Color c = GetPixelColor(x, y);
+    *r = c.r;
+    *g = c.g;
+    *b = c.b;
 }

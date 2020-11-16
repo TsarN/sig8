@@ -106,7 +106,7 @@ static void UpdateBufferData(void)
     glBindTexture(GL_TEXTURE_2D, state->window.screenTexture);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                     state->display.width, state->display.height,
-                    GL_RGBA, GL_UNSIGNED_BYTE, 0);
+                    GL_RGB, GL_UNSIGNED_BYTE, 0);
 
 }
 
@@ -238,7 +238,7 @@ static void WindowDraw(void)
 {
     UpdateBufferData();
     glViewport(0, 0, state->window.width, state->window.height);
-    Color black = {0, 0, 0, 255};
+    Color black = {0, 0, 0};
     glClearColor(
             (float)black.r / 255.0f,
             (float)black.g / 255.0f,
