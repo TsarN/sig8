@@ -28,12 +28,13 @@
 #define SIG8_H
 
 #ifdef __cplusplus
-    #define API extern "C"
+    #define EXTERN_C extern "C"
 #else
     #include <stdbool.h>
-    #define API
+    #define EXTERN_C
 #endif
 
+#define API EXTERN_C
 
 //! A private function that performs various initialization tasks.
 //! The function's argument is a bitmask of the following flags:
@@ -45,6 +46,11 @@
 API void sig8_Initialize(unsigned);
 
 API int sig8_DefaultMain(void (*setup)(void), void (*loop)(void), int argc, char **argv);
+
+#if !defined(SIG8_BUILD_LIB) && defined(SIG8_USE_MAIN)
+EXTERN_C void setup(void);
+EXTERN_C void loop(void);
+#endif
 
 //
 // Subsystem: [system]
@@ -113,4 +119,5 @@ API void UnloadSpriteSheet(SpriteSheet spriteSheet);
 API void UseSpriteSheet(SpriteSheet spriteSheet);
 
 #undef API
+#undef EXTERN_C
 #endif

@@ -82,6 +82,7 @@ endfunction()
 
 function(sig8_main target)
     target_sources(${target} PRIVATE "${SIG8_ROOT}/src/sig8_main.c")
+    target_compile_definitions(${target} PRIVATE SIG8_USE_MAIN)
 endfunction()
 
 function(sig8_link target)
