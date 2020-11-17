@@ -79,3 +79,11 @@ extern const unsigned char *${SIG8_BUNDLE_NAME};
         target_compile_definitions(${target} PRIVATE SIG8_USE_RESOURCE_PATH="${CMAKE_CURRENT_SOURCE_DIR}/")
     endif()
 endfunction()
+
+function(sig8_main target)
+    target_sources(${target} PRIVATE "${SIG8_ROOT}/src/sig8_main.c")
+endfunction()
+
+function(sig8_link target)
+    target_link_libraries(${target} PRIVATE sig8::sig8)
+endfunction()

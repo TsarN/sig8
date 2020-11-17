@@ -1,12 +1,10 @@
-#include "sig8.h"
+#include <stdio.h>
 
-void update(void)
+void setup(void)
 {
+    puts("Hello");
 }
 
-int main()
+void loop(void)
 {
-    Initialize();
-    Run(update);
-    return 0;
 }
