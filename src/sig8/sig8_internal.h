@@ -34,10 +34,8 @@
 #include <string.h>
 #include <math.h>
 
-typedef unsigned char u8;
-
 typedef struct {
-    u8 r, g, b;
+    unsigned char r, g, b;
 } Color;
 
 //! Display state.
@@ -64,7 +62,7 @@ typedef struct {
 
 typedef struct {
     const char *resourcePath;
-    const char *resourceBundle;
+    const unsigned char *resourceBundle;
 } Filesystem;
 
 //! Struct containing all the information about current application state.
@@ -78,7 +76,6 @@ typedef struct {
 } State;
 
 #define RESOURCE_SCHEMA "res://"
-#define USER_DATA_SCHEMA "user://"
 
 typedef struct {
     char *path;  //!< Owned string, path to the resource
@@ -96,7 +93,7 @@ typedef struct {
 
 struct SpriteSheet_s {
     ResourceInfo info;
-    u8 *pixels;
+    unsigned char *pixels;
 };
 
 struct Palette_s {

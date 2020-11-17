@@ -37,13 +37,11 @@
 #define API EXTERN_C
 
 API void sig8_Initialize(void);
-API int sig8_DefaultMain(void (*setup)(void), void (*loop)(void), int argc, char **argv);
-API void sig8_UseResourceBundle(const char *bundle);
+API void sig8_UseResourceBundle(const unsigned char *bundle);
 API void sig8_UseResourcePath(const char *path);
 
-#if !defined(SIG8_BUILD_LIB) && defined(SIG8_USE_MAIN)
-EXTERN_C void setup(void);
-EXTERN_C void loop(void);
+#ifdef SIG8_USE_DEFAULT_BUNDLE
+extern const unsigned char *SIG8_RESOURCE_BUNDLE;
 #endif
 
 //
@@ -53,9 +51,19 @@ EXTERN_C void loop(void);
 #if !defined(SIG8_BUILD_LIB) && !defined(SIG8_NO_INITIALIZE)
 
 //! Initialize the library, must be the first function called.
-static inline void Initialize(void)
+static inline void Initialize(int argc, char **argv)
 {
+    (void)argc;
+    (void)argv;
     sig8_Initialize();
+
+#ifdef SIG8_USE_RESOURCE_PATH
+    sig8_UseResourcePath(SIG8_USE_RESOURCE_PATH);
+#endif
+
+#ifdef SIG8_USE_DEFAULT_BUNDLE
+    sig8_UseResourceBundle(SIG8_RESOURCE_BUNDLE);
+#endif
 }
 
 #endif
@@ -106,6 +114,14 @@ API void UnloadSpriteSheet(SpriteSheet spriteSheet);
 
 //! Use the sprite sheet for further drawing
 API void UseSpriteSheet(SpriteSheet spriteSheet);
+
+//
+// Subsystem: [fs]
+//
+
+//! Read file contents, resolving special paths (e.g. res://).
+//! Returned pointer is owned by the caller and should be freed using free().
+unsigned char *ReadFileContents(const char *path, int *size);
 
 #undef API
 #undef EXTERN_C

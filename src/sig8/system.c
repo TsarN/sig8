@@ -39,17 +39,6 @@ void sig8_Initialize()
     WindowInit();
 }
 
-int sig8_DefaultMain(void (*setup)(void), void (*loop)(void), int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    setup();
-    Run(loop);
-
-    return 0;
-}
-
 void Deinitialize(void)
 {
     if (state) {
