@@ -27,7 +27,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#ifdef SIG8_USE_GLAD_ES3
+#ifdef SIG8_USE_GLAD
 #include <glad.h>
 #else
 #include <GLES3/gl3.h>
@@ -254,19 +254,26 @@ static void WindowDraw(void)
     glfwSwapBuffers(state->window.window);
 }
 
-static void WindowFail(void)
+static void WindowFail(const char *err)
 {
-    fputs("Internal error", stderr);
+    fprintf(stderr, "sig8: %s failed\n", err);
     Deinitialize();
     glfwTerminate();
     exit(EXIT_FAILURE);
 }
 
+static void ErrorCallback(int errorCode, const char *message)
+{
+    fprintf(stderr, "sig8: glfw error %d: %s\n", errorCode, message);
+}
+
 static void WindowInit(void)
 {
     if (!glfwInit()) {
-        WindowFail();
+        WindowFail("glfwInit");
     }
+
+    glfwSetErrorCallback(ErrorCallback);
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -276,17 +283,20 @@ static void WindowInit(void)
             glfwCreateWindow(512, 512, "sig8", NULL, NULL);
 
     if (!window) {
-        WindowFail();
+        WindowFail("glfwCreateWindow");
     }
 
     glfwMakeContextCurrent(window);
+
     glfwSwapInterval(1);
 
-#ifdef SIG8_USE_GLAD_ES3
+#ifdef SIG8_USE_GLAD
     if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
-        WindowFail();
+        WindowFail("gladLoadGLES2Loader");
     }
 #endif
 
     GLESInit();
+
+    printf("sig8: using %s\n", glGetString(GL_VERSION));
 }

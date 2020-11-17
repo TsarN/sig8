@@ -36,16 +36,10 @@
 
 #define API EXTERN_C
 
-//! A private function that performs various initialization tasks.
-//! The function's argument is a bitmask of the following flags:
-//!
-//! - 0x01 - perform initialization, if 0 then only assert that
-//!          not already initialized
-//! - 0x02 - install atexit handler to call Deinitialize()
-//! - 0x04 - initialize [window]
-API void sig8_Initialize(unsigned);
-
+API void sig8_Initialize(void);
 API int sig8_DefaultMain(void (*setup)(void), void (*loop)(void), int argc, char **argv);
+API void sig8_UseResourceBundle(const char *bundle);
+API void sig8_UseResourcePath(const char *path);
 
 #if !defined(SIG8_BUILD_LIB) && defined(SIG8_USE_MAIN)
 EXTERN_C void setup(void);
@@ -61,12 +55,7 @@ EXTERN_C void loop(void);
 //! Initialize the library, must be the first function called.
 static inline void Initialize(void)
 {
-    sig8_Initialize(0);
-    sig8_Initialize(
-        0x01u | // initialize
-        0x02u | // install atexit handler
-        0x04u   // initialize [window]
-    );
+    sig8_Initialize();
 }
 
 #endif

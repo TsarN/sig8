@@ -25,25 +25,18 @@
 
 #include "sig8_internal.h"
 
-void sig8_Initialize(unsigned flags)
+void sig8_Initialize()
 {
     if (state) {
         fprintf(stderr, "Attempt to initialize sig8 twice");
         exit(1);
     }
 
-    if (!(flags & FLAG_INIT)) {
-        return;
-    }
-
     state = calloc(1, sizeof(State));
-
-    if (flags & FLAG_ATEXIT) {
-        atexit(Deinitialize);
-    }
+    atexit(Deinitialize);
 
     DisplayInit();
-    if (flags & FLAG_INIT_WINDOW) WindowInit();
+    WindowInit();
 }
 
 int sig8_DefaultMain(void (*setup)(void), void (*loop)(void), int argc, char **argv)

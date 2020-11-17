@@ -62,14 +62,23 @@ typedef struct {
     float offsetX, offsetY;
 } Window;
 
+typedef struct {
+    const char *resourcePath;
+    const char *resourceBundle;
+} Filesystem;
+
 //! Struct containing all the information about current application state.
 typedef struct {
-    void (*update)(void); //!< Update function, called on every frame
-    Display display;      //!< Current display state
-    Window window;        //!< Current window state
-    Palette palette;      //!< Current palette
+    void (*update)(void);  //!< Update function, called on every frame
+    Display display;       //!< Current display state
+    Window window;         //!< Current window state
+    Palette palette;       //!< Current palette
+    Filesystem filesystem; //!< Current virtual filesystem state
     bool shouldQuit;
 } State;
+
+#define RESOURCE_SCHEMA "res://"
+#define USER_DATA_SCHEMA "user://"
 
 typedef struct {
     char *path;  //!< Owned string, path to the resource
@@ -97,13 +106,6 @@ struct Palette_s {
 };
 
 static State *state;
-
-//! Flags for sig8_Initialize
-enum {
-    FLAG_INIT = 0x01,        //!< perform initialization
-    FLAG_ATEXIT = 0x02,      //!< install atexit handlers
-    FLAG_INIT_WINDOW = 0x04  //!< initialize [window]
-};
 
 //! Initialize display with default settings.
 static void DisplayInit(void);

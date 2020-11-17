@@ -11,13 +11,11 @@ endif()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     target_link_options(sig8 PUBLIC -sFULL_ES3=1)
-    target_compile_definitions(sig8 PRIVATE SIG8_USE_BUILTIN_ES3)
+    target_compile_definitions(sig8 PRIVATE)
 else()
-    find_package(OpenGL REQUIRED)
-
-    target_include_directories(sig8 PRIVATE OpenGL::GL)
-    target_link_libraries(sig8 PRIVATE OpenGL::GL glad::glad_gles3)
-    target_compile_definitions(sig8 PRIVATE SIG8_USE_GLAD_ES3)
+    target_include_directories(sig8 PRIVATE)
+    target_link_libraries(sig8 PRIVATE glad::glad)
+    target_compile_definitions(sig8 PRIVATE SIG8_USE_GLAD)
 endif()
 
 target_link_libraries(sig8 PRIVATE glfw::glfw)
