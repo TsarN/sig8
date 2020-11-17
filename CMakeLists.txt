@@ -3,6 +3,9 @@ set(SIG8_VERSION 0.1.0)
 project(sig8 VERSION ${SIG8_VERSION} DESCRIPTION "Retro game library" LANGUAGES C)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+set(SIG8_ROOT "${PROJECT_SOURCE_DIR}")
+
+include(cmake/sig8.cmake)
 
 add_subdirectory(thirdparty)
 add_subdirectory(src)

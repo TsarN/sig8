@@ -36,4 +36,4 @@ target_include_directories(sig8
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
-target_link_libraries(sig8 PRIVATE m ${CMAKE_DL_LIBS})
+target_link_libraries(sig8 PRIVATE m ${CMAKE_DL_LIBS} stb_image::stb_image)
