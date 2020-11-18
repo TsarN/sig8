@@ -68,7 +68,7 @@ static inline void Initialize(int argc, char **argv)
 
 #endif
 
-//! Deinitialize the library, should be called automatically on <code>atexit</code>.
+//! Deinitialize the library, called automatically upon exiting from Run()
 API void Deinitialize(void);
 
 //! Run the game with provided update function.

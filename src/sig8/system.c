@@ -33,7 +33,6 @@ void sig8_Initialize()
     }
 
     state = calloc(1, sizeof(State));
-    atexit(Deinitialize);
 
     DisplayInit();
     WindowInit();
@@ -42,6 +41,7 @@ void sig8_Initialize()
 void Deinitialize(void)
 {
     if (state) {
+        WindowDeinit();
         DisplayDeinit();
         free(state);
         state = NULL;
@@ -56,4 +56,6 @@ void Run(void (*update)(void))
         WindowDraw();
         WindowHandleEvents();
     }
+
+    Deinitialize();
 }

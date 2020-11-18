@@ -228,6 +228,8 @@ static void GLESInit(void)
 
 static void WindowHandleEvents(void)
 {
+    if (!state->window.initialized) return;
+
     glfwPollEvents();
     if (glfwWindowShouldClose(state->window.window)) {
         state->shouldQuit = true;
@@ -236,6 +238,8 @@ static void WindowHandleEvents(void)
 
 static void WindowDraw(void)
 {
+    if (!state->window.initialized) return;
+
     UpdateBufferData();
     glViewport(0, 0, state->window.width, state->window.height);
     Color black = {0, 0, 0};
@@ -258,7 +262,6 @@ static void WindowFail(const char *err)
 {
     fprintf(stderr, "sig8: %s failed\n", err);
     Deinitialize();
-    glfwTerminate();
     exit(EXIT_FAILURE);
 }
 
@@ -299,4 +302,14 @@ static void WindowInit(void)
     GLESInit();
 
     printf("sig8: using %s\n", glGetString(GL_VERSION));
+
+    state->window.initialized = true;
+}
+
+void WindowDeinit(void)
+{
+    if (!state->window.initialized) return;
+
+    state->window.initialized = false;
+    glfwTerminate();
 }

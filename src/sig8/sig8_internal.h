@@ -45,8 +45,8 @@ typedef struct {
 } Display;
 
 typedef struct {
+    bool initialized;
     void *window;             //!< Window object
-    void *context;            //!< GL context
 
     unsigned screenVBO;       //!< Vertex buffer object for the screen rect
     unsigned screenPBO;       //!< Pixel buffer object for the screen texture
@@ -116,8 +116,11 @@ static inline void SetPixelColor(int x, int y, Color color);
 //! Get display pixel color, assuming the coordinates are inside screen bounds.
 static inline Color GetPixelColor(int x, int y);
 
-//! Create and initialize SDL window.
+//! Create and initialize glfw window.
 static void WindowInit(void);
+
+//! Deinitialize glfw window
+static void WindowDeinit(void);
 
 //! Draw a frame.
 static void WindowDraw(void);
