@@ -174,12 +174,3 @@ endif()
 if (MSVC)
     target_compile_definitions(glfw PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
-
-if (GLFW_INSTALL)
-    install(TARGETS glfw
-            EXPORT glfwTargets
-            RUNTIME DESTINATION "bin"
-            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-endif()
-
