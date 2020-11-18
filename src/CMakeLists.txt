@@ -1,8 +1,6 @@
 add_library(sig8 STATIC sig8.c include/sig8.h)
 add_library(sig8::sig8 ALIAS sig8)
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/config.h")
-
 if (MSVC)
     target_compile_options(sig8 PRIVATE /W4)
 else()
