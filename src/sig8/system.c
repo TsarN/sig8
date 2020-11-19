@@ -16,8 +16,10 @@ void sig8_Initialize()
 
     state = calloc(1, sizeof(State));
 
+    LoadSystemResources();
     DisplayInit();
     WindowInit();
+    UsePalette(state->sysResources.defaultPalette);
 }
 
 void Deinitialize(void)
@@ -25,6 +27,7 @@ void Deinitialize(void)
     if (state) {
         WindowDeinit();
         DisplayDeinit();
+        UnloadSystemResources();
         free(state);
         state = NULL;
     }
@@ -40,4 +43,20 @@ void Run(void (*update)(void))
     }
 
     Deinitialize();
+}
+
+void LoadSystemResources(void)
+{
+    Filesystem old = state->filesystem;
+    sig8_UseResourceBundle(sig8_SystemBundle);
+
+    state->sysResources.defaultPalette = LoadPalette("res://resources/default_palette.png");
+
+    state->filesystem = old;
+}
+
+void UnloadSystemResources(void)
+{
+    UnloadPalette(state->sysResources.defaultPalette);
+    state->sysResources.defaultPalette = NULL;
 }

@@ -20,7 +20,7 @@ API void sig8_UseResourceBundle(const unsigned char *bundle);
 API void sig8_UseResourcePath(const char *path);
 
 #ifdef SIG8_USE_DEFAULT_BUNDLE
-extern const unsigned char *SIG8_RESOURCE_BUNDLE;
+extern const unsigned char *sig8_DefaultBundle;
 #endif
 
 //
@@ -41,7 +41,7 @@ static inline void Initialize(int argc, char **argv)
 #endif
 
 #ifdef SIG8_USE_DEFAULT_BUNDLE
-    sig8_UseResourceBundle(SIG8_RESOURCE_BUNDLE);
+    sig8_UseResourceBundle(sig8_DefaultBundle);
 #endif
 }
 

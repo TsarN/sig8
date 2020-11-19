@@ -10,7 +10,7 @@ function(sig8_bundle target)
     set(SIG8_DEFAULT_BUNDLE NO)
 
     if (NOT DEFINED SIG8_BUNDLE_NAME)
-        set(SIG8_BUNDLE_NAME SIG8_RESOURCE_BUNDLE)
+        set(SIG8_BUNDLE_NAME sig8_DefaultBundle)
         set(SIG8_DEFAULT_BUNDLE YES)
     endif()
 
@@ -60,10 +60,10 @@ function(sig8_bundle target)
         if (SIG8_DEFAULT_BUNDLE)
             target_compile_definitions(${target} PRIVATE SIG8_USE_DEFAULT_BUNDLE)
         else()
-            string(MAKE_C_IDENTIFIER "${SIG8_BUNDLE_PATH}" SIG8_BUNDLE_PATH_IDENT)
+            string(MAKE_C_IDENTIFIER "${SIG8_BUNDLE_FILE}" SIG8_BUNDLE_FILE_IDENT)
             file(WRITE "${SIG8_BUNDLE_PATH}.h"
-"#ifndef ${SIG8_BUNDLE_PATH_IDENT}_H_INCLUDED
-#define ${SIG8_BUNDLE_PATH_IDENT}_H_INCLUDED
+"#ifndef ${SIG8_BUNDLE_FILE_IDENT}_H_INCLUDED
+#define ${SIG8_BUNDLE_FILE_IDENT}_H_INCLUDED
 
 extern const unsigned char *${SIG8_BUNDLE_NAME};
 

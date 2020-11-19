@@ -1,3 +1,4 @@
+add_subdirectory(stb_ds)
 add_subdirectory(stb_image)
 add_subdirectory(stb_image_write)
 

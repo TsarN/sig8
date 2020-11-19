@@ -11,6 +11,7 @@
 #define SIG8_BUILD_LIB
 
 #include "sig8.h"
+#include "sig8_system_resources.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,15 +49,9 @@ typedef struct {
     const unsigned char *resourceBundle;
 } Filesystem;
 
-//! Struct containing all the information about current application state.
 typedef struct {
-    void (*update)(void);  //!< Update function, called on every frame
-    Display display;       //!< Current display state
-    Window window;         //!< Current window state
-    Palette palette;       //!< Current palette
-    Filesystem filesystem; //!< Current virtual filesystem state
-    bool shouldQuit;
-} State;
+    Palette defaultPalette; //!< Default palette
+} SysResources;
 
 #define RESOURCE_SCHEMA "res://"
 
@@ -65,6 +60,16 @@ typedef struct {
     bool system; //!< True for builtin resources (like editor sprites)
 } ResourceInfo;
 
+//! Struct containing all the information about current application state.
+typedef struct {
+    void (*update)(void);      //!< Update function, called on every frame
+    Display display;           //!< Current display state
+    Window window;             //!< Current window state
+    Palette palette;           //!< Current palette
+    Filesystem filesystem;     //!< Current virtual filesystem state
+    SysResources sysResources; //!< System resources
+    bool shouldQuit;
+} State;
 
 #define SPRITE_SHEET_WIDTH 16
 #define SPRITE_SHEET_HEIGHT 16
@@ -110,5 +115,11 @@ static void WindowDraw(void);
 
 //! Handle window events.
 static void WindowHandleEvents(void);
+
+//! Load system resources (e.g. default palette)
+static void LoadSystemResources(void);
+
+//! Unload system resources
+static void UnloadSystemResources(void);
 
 #endif

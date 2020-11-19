@@ -1,15 +1,15 @@
 #include <sig8.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void update(void)
 {
+    PutPixel(rand() % 128, rand() % 128, rand() % 16);
 }
 
 int main(int argc, char **argv)
 {
     Initialize(argc, argv);
-    char *s = (char *)ReadFileContents("res://main.c", NULL);
-    puts(s);
     Run(update);
 
     return 0;

@@ -32,4 +32,16 @@ target_include_directories(sig8
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
-target_link_libraries(sig8 PRIVATE m ${CMAKE_DL_LIBS} stb_image::stb_image)
+target_link_libraries(sig8 PRIVATE
+        m
+        ${CMAKE_DL_LIBS}
+        stb_ds::stb_ds
+        stb_image::stb_image
+)
+
+sig8_bundle(sig8
+    FORCE
+    NAME sig8_SystemBundle
+    FILE sig8_system_resources
+    RESOURCES ./resources/default_palette.png
+)
