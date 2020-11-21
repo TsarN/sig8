@@ -4,6 +4,7 @@
 
 void update(void)
 {
+    DrawString(40, 40, 8, "Hello, world!");
     PutPixel(rand() % 128, rand() % 128, rand() % 16);
 }
 

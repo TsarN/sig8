@@ -51,6 +51,7 @@ typedef struct {
 
 typedef struct {
     Palette defaultPalette; //!< Default palette
+    Font defaultFont;       //!< Default font
 } SysResources;
 
 #define RESOURCE_SCHEMA "res://"
@@ -66,6 +67,7 @@ typedef struct {
     Display display;           //!< Current display state
     Window window;             //!< Current window state
     Palette palette;           //!< Current palette
+    Font font;                 //!< Current font
     Filesystem filesystem;     //!< Current virtual filesystem state
     SysResources sysResources; //!< System resources
     bool shouldQuit;
@@ -78,6 +80,7 @@ typedef struct {
 #define SPRITE_HEIGHT 8
 #define SPRITE_SHEET_WIDTH_PX (SPRITE_SHEET_WIDTH * SPRITE_WIDTH)
 #define SPRITE_SHEET_HEIGHT_PX (SPRITE_SHEET_HEIGHT * SPRITE_HEIGHT)
+#define MAX_PALETTE_COLORS 256
 
 struct SpriteSheet_s {
     ResourceInfo info;
@@ -88,6 +91,19 @@ struct Palette_s {
     ResourceInfo info;
     int size;
     Color *colors;
+};
+
+struct Font_s {
+    ResourceInfo info;
+
+    int height;
+    int bytesPerLine;
+    int firstCharCode;
+    int lastCharCode;
+    unsigned char *charData;
+    int *charWidth;
+
+    Font fallback;
 };
 
 static State *state;

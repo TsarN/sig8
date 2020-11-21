@@ -43,5 +43,7 @@ sig8_bundle(sig8
     FORCE
     NAME sig8_SystemBundle
     FILE sig8_system_resources
-    RESOURCES ./resources/default_palette.png
+    RESOURCES
+        ./resources/default_palette.png
+        ./resources/default_font.png
 )

@@ -19,7 +19,8 @@ void sig8_Initialize()
     LoadSystemResources();
     DisplayInit();
     WindowInit();
-    UsePalette(state->sysResources.defaultPalette);
+    UsePalette(NULL);
+    UseFont(NULL);
 }
 
 void Deinitialize(void)
@@ -51,6 +52,7 @@ void LoadSystemResources(void)
     sig8_UseResourceBundle(sig8_SystemBundle);
 
     state->sysResources.defaultPalette = LoadPalette("res://resources/default_palette.png");
+    state->sysResources.defaultFont = LoadFont("res://resources/default_font.png");
 
     state->filesystem = old;
 }
@@ -59,4 +61,7 @@ void UnloadSystemResources(void)
 {
     UnloadPalette(state->sysResources.defaultPalette);
     state->sysResources.defaultPalette = NULL;
+
+    UnloadFont(state->sysResources.defaultFont);
+    state->sysResources.defaultFont = NULL;
 }
