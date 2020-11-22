@@ -5,8 +5,6 @@
  *  See https://github.com/TsarN/sig8/blob/master/LICENSE for license info
  */
 
-#include "sig8_internal.h"
-
 void UseFont(Font font)
 {
     if (!font) {

@@ -5,11 +5,6 @@
  *  See https://github.com/TsarN/sig8/blob/master/LICENSE for license info
  */
 
-#include "sig8_internal.h"
-#include "stb_ds.h"
-#include "stb_image.h"
-
-
 void UsePalette(Palette palette)
 {
     if (!palette) {

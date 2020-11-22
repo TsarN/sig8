@@ -13,11 +13,15 @@
 #include "sig8.h"
 #include "sig8_system_resources.h"
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
+#include "stb_ds.h"
+#include "stb_image.h"
 
 #define MAX_PALETTE_COLORS 255
 
@@ -98,6 +102,13 @@ struct Font_s {
     int *charWidth;
 
     Font fallback;
+};
+
+struct Image_s {
+    ResourceInfo info;
+
+    int width, height;
+    unsigned char *colors; //!< Colors (indexed into the palette)
 };
 
 static State *state;

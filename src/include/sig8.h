@@ -102,6 +102,14 @@ API void DrawUtf8String(int x, int y, int color, const char *string);
 //! Draw ASCII string at coordinates using the current font.
 API void DrawString(int x, int y, int color, const char *string);
 
+typedef struct Image_s *Image;
+
+//! Create a new image with specified dimensions.
+API Image NewImage(int width, int height);
+
+//! Unload an image freeing the allocated memory.
+API void UnloadImage(Image image);
+
 //
 // Subsystem: [fs]
 //

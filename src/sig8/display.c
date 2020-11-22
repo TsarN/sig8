@@ -5,9 +5,6 @@
  *  See https://github.com/TsarN/sig8/blob/master/LICENSE for license info
  */
 
-#include <assert.h>
-#include "sig8_internal.h"
-
 void DisplayInit(void)
 {
     state->display.width = 128;

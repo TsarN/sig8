@@ -5,8 +5,6 @@
  *  See https://github.com/TsarN/sig8/blob/master/LICENSE for license info
  */
 
-#include "sig8_internal.h"
-
 void sig8_UseResourceBundle(const unsigned char *bundle)
 {
     state->filesystem.resourcePath = NULL;

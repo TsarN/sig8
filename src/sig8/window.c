@@ -5,7 +5,6 @@
  *  See https://github.com/TsarN/sig8/blob/master/LICENSE for license info
  */
 
-#include "sig8_internal.h"
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 

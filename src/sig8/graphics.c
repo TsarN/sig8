@@ -5,13 +5,9 @@
  *  See https://github.com/TsarN/sig8/blob/master/LICENSE for license info
  */
 
-#include "sig8_internal.h"
-#include "stb_ds.h"
-#include "stb_image.h"
-
 static void GraphicsInit(void)
 {
-    size_t size = sizeof(state->graphics.colors[0]) * state->display.width *state->display.height;
+    size_t size = state->display.width *state->display.height;
     state->graphics.colors = malloc(size);
     memset(state->graphics.colors, 0xff, size);
 
@@ -175,7 +171,6 @@ void DrawLine(int x0, int y0, int x1, int y1, int color)
 
 void ClearScreen(int color)
 {
-    size_t size = sizeof(state->graphics.colors[0]) * state->display.width *state->display.height;
-    assert(sizeof(state->graphics.colors[0]) == 1);
+    size_t size = state->display.width *state->display.height;
     memset(state->graphics.colors, color, size);
 }
