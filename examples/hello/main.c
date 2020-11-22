@@ -1,5 +1,4 @@
 #include <sig8.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 void update(void)

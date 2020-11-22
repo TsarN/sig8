@@ -66,7 +66,7 @@ static int DrawCharacter(int x, int y, int color, int ch)
     return w + 1;
 }
 
-static int NextUnicodeCodepoint(const unsigned char **s)
+static inline int NextUtf8Codepoint(const unsigned char **s)
 {
     if (!**s) {
         return 0;
@@ -100,10 +100,17 @@ static int NextUnicodeCodepoint(const unsigned char **s)
     return ret;
 }
 
-void DrawString(int x, int y, int color, const char *string)
+void DrawUtf8String(int x, int y, int color, const char *string)
 {
     int c;
-    while ((c = NextUnicodeCodepoint((const unsigned char **)(&string)))) {
+    while ((c = NextUtf8Codepoint((const unsigned char **) (&string)))) {
         x += DrawCharacter(x, y, color, c);
+    }
+}
+
+void DrawString(int x, int y, int color, const char *string)
+{
+    for (const char *c = string; *c; ++c) {
+        x += DrawCharacter(x, y, color, (unsigned char)*c);
     }
 }

@@ -114,7 +114,10 @@ API void UnloadFont(Font font);
 //! If font is NULL then use default font.
 API void UseFont(Font font);
 
-//! Draw string at coordinates using the current font.
+//! Draw UTF-8 encoded string at coordinates using the current font.
+API void DrawUtf8String(int x, int y, int color, const char *string);
+
+//! Draw ASCII string at coordinates using the current font.
 API void DrawString(int x, int y, int color, const char *string);
 
 //
