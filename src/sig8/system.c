@@ -19,13 +19,13 @@ void sig8_Initialize()
     LoadSystemResources();
     DisplayInit();
     WindowInit();
-    UsePalette(NULL);
-    UseFont(NULL);
+    GraphicsInit();
 }
 
 void Deinitialize(void)
 {
     if (state) {
+        GraphicsDeinit();
         WindowDeinit();
         DisplayDeinit();
         UnloadSystemResources();
@@ -39,6 +39,7 @@ void Run(void (*update)(void))
     state->update = update;
     while (!state->shouldQuit) {
         update();
+        Flip();
         WindowDraw();
         WindowHandleEvents();
     }

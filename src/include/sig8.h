@@ -9,7 +9,6 @@
 #ifdef __cplusplus
     #define EXTERN_C extern "C"
 #else
-    #include <stdbool.h>
     #define EXTERN_C
 #endif
 
@@ -70,30 +69,13 @@ API void UnloadPalette(Palette palette);
 API void UsePalette(Palette palette);
 
 //! Put a pixel from the palette on the screen.
-API void PutPixel(int x, int y, int color);
+API void DrawPixel(int x, int y, int color);
 
-//! Put an RGB pixel on the screen.
-API void PutPixelRGB(int x, int y, int r, int g, int b);
-
-//! Read an RGB pixel from the screen.
-API void GetPixelRGB(int x, int y, int *r, int *g, int *b);
+//! Draw a line on the screen.
+API void DrawLine(int x0, int y0, int x1, int y1, int color);
 
 //! Clear the screen using a color from the palette.
 API void ClearScreen(int color);
-
-//! Clear the screen using an RGB color.
-API void ClearScreenRGB(int r, int g, int b);
-
-typedef struct SpriteSheet_s *SpriteSheet;
-
-//! Load a sprite sheet from an image.
-API SpriteSheet LoadSpriteSheet(const char *path);
-
-//! Unload a sprite sheet freeing the allocated memory.
-API void UnloadSpriteSheet(SpriteSheet spriteSheet);
-
-//! Use the sprite sheet for future drawing.
-API void UseSpriteSheet(SpriteSheet spriteSheet);
 
 typedef struct Font_s *Font;
 

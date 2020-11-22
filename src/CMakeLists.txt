@@ -33,8 +33,6 @@ target_include_directories(sig8
 )
 
 target_link_libraries(sig8 PRIVATE
-        m
-        ${CMAKE_DL_LIBS}
         stb_ds::stb_ds
         stb_image::stb_image
 )

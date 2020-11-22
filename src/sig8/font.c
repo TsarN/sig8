@@ -13,7 +13,7 @@ void UseFont(Font font)
         font = state->sysResources.defaultFont;
     }
 
-    state->font = font;
+    state->graphics.font = font;
 }
 
 Font LoadFontEx(const char *path,
@@ -87,8 +87,8 @@ Font LoadFont(const char *path)
 
 void UnloadFont(Font font)
 {
-    if (font == state->font) {
-        state->font = state->sysResources.defaultFont;
+    if (font == state->graphics.font) {
+        state->graphics.font = state->sysResources.defaultFont;
     }
 
     free(font->charData);

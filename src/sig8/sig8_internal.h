@@ -13,10 +13,13 @@
 #include "sig8.h"
 #include "sig8_system_resources.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
+#define MAX_PALETTE_COLORS 255
 
 typedef struct {
     unsigned char r, g, b;
@@ -50,6 +53,12 @@ typedef struct {
 } Filesystem;
 
 typedef struct {
+    unsigned char *colors; //!< Colors (indexed into the palette), 0xff = transparent
+    Palette palette;       //!< Current palette
+    Font font;             //!< Current font
+} Graphics;
+
+typedef struct {
     Palette defaultPalette; //!< Default palette
     Font defaultFont;       //!< Default font
 } SysResources;
@@ -66,26 +75,11 @@ typedef struct {
     void (*update)(void);      //!< Update function, called on every frame
     Display display;           //!< Current display state
     Window window;             //!< Current window state
-    Palette palette;           //!< Current palette
-    Font font;                 //!< Current font
     Filesystem filesystem;     //!< Current virtual filesystem state
+    Graphics graphics;         //!< Graphics subsystem state
     SysResources sysResources; //!< System resources
     bool shouldQuit;
 } State;
-
-#define SPRITE_SHEET_WIDTH 16
-#define SPRITE_SHEET_HEIGHT 16
-#define SPRITE_SHEET_SIZE 256
-#define SPRITE_WIDTH 8
-#define SPRITE_HEIGHT 8
-#define SPRITE_SHEET_WIDTH_PX (SPRITE_SHEET_WIDTH * SPRITE_WIDTH)
-#define SPRITE_SHEET_HEIGHT_PX (SPRITE_SHEET_HEIGHT * SPRITE_HEIGHT)
-#define MAX_PALETTE_COLORS 256
-
-struct SpriteSheet_s {
-    ResourceInfo info;
-    unsigned char *pixels;
-};
 
 struct Palette_s {
     ResourceInfo info;
@@ -119,6 +113,15 @@ static inline void SetPixelColor(int x, int y, Color color);
 
 //! Get display pixel color, assuming the coordinates are inside screen bounds.
 static inline Color GetPixelColor(int x, int y);
+
+//! Initialize graphics.
+static void GraphicsInit(void);
+
+//! Deinitialize graphics.
+static void GraphicsDeinit(void);
+
+//! Put all pixels from palette-indexed buffer into the RGB one.
+static void Flip(void);
 
 //! Create and initialize glfw window.
 static void WindowInit(void);

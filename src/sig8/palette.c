@@ -16,7 +16,7 @@ void UsePalette(Palette palette)
         palette = state->sysResources.defaultPalette;
     }
 
-    state->palette = palette;
+    state->graphics.palette = palette;
 }
 
 Palette LoadPalette(const char *path)
@@ -75,8 +75,8 @@ Palette LoadPalette(const char *path)
 
 void UnloadPalette(Palette palette)
 {
-    if (palette == state->palette) {
-        state->palette = state->sysResources.defaultPalette;
+    if (palette == state->graphics.palette) {
+        state->graphics.palette = state->sysResources.defaultPalette;
     }
 
     free(palette->colors);
